@@ -1,7 +1,14 @@
 {
   "name": "go-source-action",
   "displayName": "Go Source Action",
-  "description": "vscode-java inspired code generator for golang",
+  "icon": "resources/icon.png",
+  "publisher": "xckomorebi",
+  "author": {
+    "name": "xckomorebi",
+    "email": "xckomorebi@icloud.com"
+  },
+  "license": "GPL-3.0-only",
+  "description": "boilerplate code generator for golang",
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.96.0"
@@ -9,6 +16,10 @@
   "categories": [
     "Other"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/xckomorebi/go-source-action.git"
+  },
   "activationEvents": [],
   "main": "./out/extension.js",
   "contributes": {
