@@ -1,71 +1,115 @@
-# go-source-action README
+Go Source Action
+===
 
-This is the README for your extension "go-source-action". After writing up a brief description, we recommend including the following sections.
+This extension generates boilerplate code for Go structures.
 
-## Features
+It mainly focuses on trivial code generation tasks like getters and setters, constructors, and interface stubs. More conplicated tasks like nested struct are not meant to be supported.
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+This extension inspired by [Language Support for Java(TM) by Red](https://marketplace.visualstudio.com/items?itemName=redhat.java).
 
-For example if there is an image subfolder under your extension project workspace:
 
-\!\[feature X\]\(images/feature-x.png\)
+## QuickStart
 
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+> let's pretend this is a video clip /s
 
 ## Requirements
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+[impl](https://github.com/josharian/impl) command has to be installed for "Gererate Interface Stub" feature.
+
+
+## Features
+
+### Generate Getters and Setters
+
+generates getters and setters for the fields of the structure with nil protection.
+
+```go
+type Foo struct {
+    bar int
+}
+
+// following methods are generated
+func (f *Foo) GetBar() int {
+    if f != nil {
+        return f.bar
+    }
+    return 0
+}
+
+func (f *Foo) SetBar(bar int) {
+    if f != nil {
+        f.bar = bar
+    }
+}
+```
+
+if no nil protection is needed, you can disable it in vscode settings.
+
+```json
+    "go.sourceAction.accessor.nilProtection": false
+```
+> Note: This feature is enabled by default.
+
+```go
+// following methods are generated
+func (f *Foo) GetBar() int {
+    return f.bar
+}
+
+func (f *Foo) SetBar(bar int) {
+    f.bar = bar
+}
+```
+ 
+
+### Generate Constructors
+
+generates constructors for the structure.
+
+```go
+type Foo struct {
+    bar int
+}
+
+// following methods are generated
+func NewFoo(bar int) *Foo {
+    return &Foo{
+        bar: bar,
+    }
+}
+```
+
+### Generate Interface Stub
+
+generates an interface stub for the structure.
+
+```go
+type Foo struct {
+    bar int
+}
+
+// Foo implements io.Closer
+func (f *Foo) Close() error {
+	panic("not implemented") // TODO: Implement
+}
+```
+
+this feature is originally provided by [vscode-go](https://marketplace.visualstudio.com/items?itemName=golang.Go) extension, and I made a tiny modification to omit the need to explicitly specify the receiver and struct name.
 
 ## Extension Settings
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
-
-For example:
-
 This extension contributes the following settings:
 
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
-
-## Known Issues
-
-Calling out known issues can help limit users opening duplicate issues against your extension.
+* `go.sourceAction.accessor.nilProtection`: enable/disable nil protection for getters and setters, see [Generate Getters and Setters](#generate-getters-and-setters) for more details.
 
 ## Release Notes
 
-Users appreciate release notes as you update your extension.
+has not been released yet.
 
-### 1.0.0
+## License
 
-Initial release of ...
+This project is licensed under the GPLv3 license
 
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
-
----
-
-## Following extension guidelines
-
-Ensure that you've read through the extensions guidelines and follow the best practices for creating your extension.
-
-* [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
-
-## Working with Markdown
-
-You can author your README using Visual Studio Code. Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux).
-* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux).
-* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets.
-
-## For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
+see [LICENSE](https://github.com/xckomorebi/go-source-action/blob/master/LICENSE)
 
 **Enjoy!**
