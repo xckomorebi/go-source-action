@@ -3,14 +3,18 @@ Go Source Action
 
 This extension generates boilerplate code for Go structures.
 
-It mainly focuses on trivial code generation tasks like getters and setters, constructors, and interface stubs. More conplicated tasks like nested struct are not meant to be supported.
+It mainly focuses on trivial code generation tasks like getters and setters, constructors, and interface stubs. More complicated tasks like nested struct are not meant to be supported.
 
 This extension inspired by [Language Support for Java(TM) by Red](https://marketplace.visualstudio.com/items?itemName=redhat.java).
 
 
 ## QuickStart
 
-> let's pretend this is a video clip /s
+There's not much preparation needed to start using this extension.
+
+Just open up a command palette and type a command (like `Go: Generate Getters and Setter`), then you are ready to go!
+
+![](resources/go-source-action-demo.gif)
 
 ## Requirements
 
@@ -110,6 +114,6 @@ has not been released yet.
 
 This project is licensed under the GPLv3 license
 
-see [LICENSE](https://github.com/xckomorebi/go-source-action/blob/master/LICENSE)
+see [LICENSE](LICENSE)
 
 **Enjoy!**
