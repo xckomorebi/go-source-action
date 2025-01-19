@@ -1,0 +1,114 @@
+import { window } from 'vscode';
+import { TextEditor } from 'vscode';
+import { QuickPickItem } from 'vscode';
+
+const structRegex = /^type\s+(\w+)\s+struct\s*{/;
+const fieldRegex = /^\s*(\w+)\s+(.+)/;
+
+export const getStructInfo = async (editor: TextEditor, noFields?: boolean): Promise<StructInfo | undefined> => {
+    const structInfoArray: StructInfo[] = [];
+
+    let i = 0;
+    while (i < editor.document.lineCount) {
+        let line = editor.document.lineAt(i).text;
+        line = line.split("//")[0].trim();
+
+        const match = structRegex.exec(line);
+        if (match) {
+            if (line.endsWith('}')) {
+                if (noFields) {
+                    structInfoArray.push(new StructInfo(match[1], i, i));
+                }
+                i++;
+                continue;
+            }
+            const structName = match[1];
+            const start = i;
+            let end = i;
+            let j = i + 1;
+            while (j < editor.document.lineCount) {
+                line = editor.document.lineAt(j).text;
+                line = line.split("//")[0].trim();
+                if (line === '}') {
+                    end = j;
+                    break;
+                }
+                j++;
+            }
+            const structInfo = new StructInfo(structName, start, end);
+            structInfoArray.push(structInfo);
+            i = j + 1;
+        }
+        i++;
+    }
+
+    if (structInfoArray.length === 0) {
+        window.showErrorMessage('No struct found.');
+        return undefined;
+    }
+
+    if (structInfoArray.length === 1) {
+        return structInfoArray[0];
+    }
+
+    return await window.showQuickPick(
+        structInfoArray,
+        {
+            placeHolder: 'Select a struct.',
+        }
+    );
+};
+
+class StructInfo implements QuickPickItem {
+    structName: string;
+    receiverName: string;
+    label: string;
+    start: number;
+    end: number;
+    fields: Map<string, string>;
+    fieldsName: string[];
+    longestField: number;
+
+    constructor(structName: string, start: number, end: number) {
+        this.structName = structName;
+        this.receiverName = structName[0].toLowerCase();
+        this.label = structName;
+        this.start = start;
+        this.end = end;
+        this.fields = new Map<string, string>();
+        this.fieldsName = [];
+        this.longestField = 0;
+    }
+
+    parseFields = (editor: TextEditor) => {
+        let i = this.start + 1;
+        while (i < this.end) {
+            let line = editor.document.lineAt(i).text;
+            line = line.split("//")[0].trim();
+            if (!line) {
+                i++;
+                continue;
+            }
+            if (line === '}') {
+                break;
+            }
+            const parts = fieldRegex.exec(line);
+            if (!parts) {
+                i++;
+                continue;
+            }
+            const fieldName = parts[1];
+            const fieldType = parts[2].trim();
+            if (!fieldName || !fieldType) {
+                i++;
+                continue;
+            }
+            this.fields.set(fieldName, fieldType);
+            this.fieldsName.push(fieldName);
+            if (fieldName.length > this.longestField) {
+                this.longestField = fieldName.length;
+            }
+            i++;
+        }
+    };
+}
