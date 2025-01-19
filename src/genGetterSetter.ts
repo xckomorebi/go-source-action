@@ -1,4 +1,4 @@
-import { window } from 'vscode';
+import { window, workspace } from 'vscode';
 import { getStructInfo } from './goStruct';
 import { StringBuilder } from './util';
 
@@ -34,14 +34,16 @@ export const genGetterSetter = async () => {
             return;
         }
 
+        const nilProtection = workspace.getConfiguration('go.sourceAction.accessor').get('nilProtection', true);
+
         const sb = new StringBuilder();
         for (const field of selectedFields) {
             const structName = structInfo.structName;
             const receiver = structInfo.receiverName;
             const fieldType = structInfo.fields.get(field) || '<unknown>';
 
-            appendGetter(sb, receiver, structName, field, fieldType);
-            appendSetter(sb, receiver, structName, field, fieldType);
+            appendGetter(sb, receiver, structName, field, fieldType, nilProtection);
+            appendSetter(sb, receiver, structName, field, fieldType, nilProtection);
         }
         editor.edit(editBuilder => {
             editBuilder.insert(insertPos, sb.toString());
@@ -56,12 +58,12 @@ const appendGetter = (
     structName: string,
     field: string,
     fieldType: string,
-    noNilProection?: boolean
+    nilProection: boolean
 ) => {
     const fieldToCap = field.charAt(0).toUpperCase() + field.slice(1);
-    if (noNilProection) {
-    sb.appendLine();
-    sb.appendLine(`func (${receiver} *${structName}) Get${fieldToCap}() ${fieldType} {`);
+    if (!nilProection) {
+        sb.appendLine();
+        sb.appendLine(`func (${receiver} *${structName}) Get${fieldToCap}() ${fieldType} {`);
         sb.appendLine(`    return ${receiver}.${field}`);
         sb.appendLine('}');
         return;
@@ -97,12 +99,12 @@ const appendSetter = (
     structName: string,
     field: string,
     fieldType: string,
-    noNilProection?: boolean
+    nilProtection: boolean
 ) => {
     const fieldToCap = field.charAt(0).toUpperCase() + field.slice(1);
     sb.appendLine();
     sb.appendLine(`func (${receiver} *${structName}) Set${fieldToCap}(${field} ${fieldType}) {`);
-    if (noNilProection) {
+    if (!nilProtection) {
         sb.appendLine(`    ${receiver}.${field} = ${field}`);
         sb.appendLine('}');
         return;

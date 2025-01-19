@@ -31,6 +31,18 @@
         "category": "Go",
         "enablement": "editorLangId == 'go'"
       }
+    ],
+    "configuration":[
+      {
+        "title": "object",
+        "properties": {
+          "go.sourceAction.accessor.nilProtection": {
+            "type": "boolean",
+            "default": true,
+            "description": "Generate nil protection for accessor methods"
+          }
+        }
+      }
     ]
   },
   "scripts": {
