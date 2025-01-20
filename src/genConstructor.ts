@@ -37,8 +37,12 @@ export const genConstructor = async () => {
         } else {
             sb.append(`\nfunc New${structInfo.structName}(`);
 
+            let longestFieldLength = 0;
             for (let i = 0; i < selectedFields.length; i++) {
                 const field = selectedFields[i];
+                if (field.length > longestFieldLength) {
+                    longestFieldLength = field.length;
+                }
                 sb.append(`${field} `);
                 sb.append(`${structInfo.fields.get(field)}`);
                 if (i < selectedFields.length - 1) {
@@ -51,7 +55,7 @@ export const genConstructor = async () => {
             sb.appendLine(`    return &${structInfo.structName}{`);
             for (const field of selectedFields) {
                 sb.append(`        ${field}: `);
-                sb.append(' '.repeat(structInfo.longestField - field.length));
+                sb.append(' '.repeat(longestFieldLength - field.length));
                 sb.appendLine(`${field},`);
             }
             sb.appendLine('    }');
