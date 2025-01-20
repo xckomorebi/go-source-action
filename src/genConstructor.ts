@@ -1,6 +1,6 @@
 import { window } from 'vscode';
 import { getStructInfo } from './goStruct';
-import { StringBuilder } from './util';
+import { StringBuilder } from './stringBuilder';
 
 export const genConstructor = async () => {
     const editor = window.activeTextEditor;
