@@ -67,7 +67,6 @@ class StructInfo implements QuickPickItem {
     end: number;
     fields: Map<string, string>;
     fieldsName: string[];
-    longestField: number;
 
     constructor(structName: string, start: number, end: number) {
         this.structName = structName;
@@ -77,7 +76,6 @@ class StructInfo implements QuickPickItem {
         this.end = end;
         this.fields = new Map<string, string>();
         this.fieldsName = [];
-        this.longestField = 0;
     }
 
     parseFields = (editor: TextEditor) => {
@@ -105,9 +103,6 @@ class StructInfo implements QuickPickItem {
             }
             this.fields.set(fieldName, fieldType);
             this.fieldsName.push(fieldName);
-            if (fieldName.length > this.longestField) {
-                this.longestField = fieldName.length;
-            }
             i++;
         }
     };
