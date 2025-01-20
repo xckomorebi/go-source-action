@@ -25,19 +25,19 @@
   "contributes": {
     "commands": [
       {
-        "command": "go-source-action.getter-and-setter",
+        "command": "go.sourceAction.accessor",
         "title": "Generate Getters and Setters",
         "category": "Go",
         "enablement": "editorLangId == 'go'"
       },
       {
-        "command": "go-source-action.constructor",
+        "command": "go.sourceAction.constructor",
         "title": "Generate Constructor",
         "category": "Go",
         "enablement": "editorLangId == 'go'"
       },
       {
-        "command": "go-source-action.interface-stub",
+        "command": "go.sourceAction.interfaceStub",
         "title": "Generate Interface Stubs for Struct",
         "category": "Go",
         "enablement": "editorLangId == 'go'"
