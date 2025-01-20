@@ -1,7 +1,10 @@
 import { window, workspace } from 'vscode';
+import { TextEditor } from 'vscode';
 import { getStructInfo } from './goStruct';
-import { StringBuilder } from './util';
+import { StringBuilder } from './stringBuilder';
 
+const getterRegex = /^func \(\w+\s+\*?(\w+)\)\s+Get(\w+)\(.*\)/;
+const setterRegex = /^func \(\w+\s+\*?(\w+)\)\s+Set(\w+)\(.*\)/;
 
 export const genGetterSetter = async () => {
     const editor = window.activeTextEditor;
@@ -23,8 +26,25 @@ export const genGetterSetter = async () => {
     }
     const insertPos = editor.document.lineAt(insertPosLine).range.end;
 
+    const [getterSet, setterSet] = parseStructMethodInfo(editor, structInfo.structName);
+
     window.showQuickPick(
-        structInfo.fieldsName,
+        structInfo.fieldsName.
+            map((fieldName) => {
+                const hasGetter = getterSet.has(toCaptial(fieldName));
+                const hasSetter = setterSet.has(toCaptial(fieldName));
+                const detail = hasGetter ? '⚠️ getter exist' : hasSetter ? '⚠️ setter exist' : '';
+
+                return {
+                    label: fieldName,
+                    description: structInfo.fields.get(fieldName),
+                    picked: true,
+                    hasGetter: hasGetter,
+                    hasSetter: hasSetter,
+                    detail: detail
+                };
+            }).
+            filter((field) => !field.hasGetter || !field.hasSetter),
         {
             placeHolder: 'Select fields to generate getter and setter.',
             canPickMany: true
@@ -38,12 +58,17 @@ export const genGetterSetter = async () => {
 
         const sb = new StringBuilder();
         for (const field of selectedFields) {
+            const fieldName = field.label;
             const structName = structInfo.structName;
             const receiver = structInfo.receiverName;
-            const fieldType = structInfo.fields.get(field) || '<unknown>';
+            const fieldType = structInfo.fields.get(fieldName) || '<unknown>';
 
-            appendGetter(sb, receiver, structName, field, fieldType, nilProtection);
-            appendSetter(sb, receiver, structName, field, fieldType, nilProtection);
+            if (!field.hasGetter) {
+                appendGetter(sb, receiver, structName, fieldName, fieldType, nilProtection);
+            }
+            if (!field.hasSetter) {
+                appendSetter(sb, receiver, structName, fieldName, fieldType, nilProtection);
+            }
         }
         editor.edit(editBuilder => {
             editBuilder.insert(insertPos, sb.toString());
@@ -163,4 +188,31 @@ const isReferenceType = (type: string): boolean => {
         return true;
     }
     return false;
+};
+
+const parseStructMethodInfo = (editor: TextEditor, structName: string): [Set<string>, Set<string>] => {
+    const getterSet = new Set<string>();
+    const setterSet = new Set<string>();
+
+    for (let i = 0; i < editor.document.lineCount; i++) {
+        let line = editor.document.lineAt(i).text;
+        line = line.split("//")[0].trim();
+
+        let getterMatch = getterRegex.exec(line);
+        if (getterMatch && getterMatch[1] === structName) {
+            getterSet.add(getterMatch[2]);
+        }
+
+        let setterMatch = setterRegex.exec(line);
+        if (setterMatch && setterMatch[1] === structName) {
+            setterSet.add(setterMatch[2]);
+            continue;
+        }
+    }
+
+    return [getterSet, setterSet];
+};
+
+const toCaptial = (s: string): string => {
+    return s.charAt(0).toUpperCase() + s.slice(1);
 };
