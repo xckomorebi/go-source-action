@@ -3,7 +3,8 @@ import { TextEditor } from 'vscode';
 import { QuickPickItem } from 'vscode';
 
 const structRegex = /^type\s+(\w+)\s+struct\s*{/;
-const fieldRegex = /^\s*(\w+)\s+(.+)/;
+// fieldName fieldType `tag`
+const fieldRegex = /^\s*(?<fieldName>\w+)\s+(?<fieldType>((<-chan|chan<-|chan)\s+)?[\{\}\*\[\]\w+_]+)(\s+`[\w\s,_":]+`)?/;
 
 export const getStructInfo = async (editor: TextEditor, noFields?: boolean): Promise<StructInfo | undefined> => {
     const structInfoArray: StructInfo[] = [];
@@ -79,31 +80,31 @@ class StructInfo implements QuickPickItem {
     }
 
     parseFields = (editor: TextEditor) => {
-        let i = this.start + 1;
-        while (i < this.end) {
+        for (let i = this.start + 1; i < this.end; i++) {
             let line = editor.document.lineAt(i).text;
+
             line = line.split("//")[0].trim();
+
             if (!line) {
-                i++;
                 continue;
             }
-            if (line === '}') {
+
+            if (line.startsWith('}')) {
                 break;
             }
+
             const parts = fieldRegex.exec(line);
-            if (!parts) {
-                i++;
+            if (!parts || !parts.groups) {
                 continue;
             }
-            const fieldName = parts[1];
-            const fieldType = parts[2].trim();
+
+            const { fieldName: fieldName, fieldType: fieldType } = parts.groups;
             if (!fieldName || !fieldType) {
-                i++;
                 continue;
             }
+
             this.fields.set(fieldName, fieldType);
             this.fieldsName.push(fieldName);
-            i++;
-        }
+        };
     };
 }
