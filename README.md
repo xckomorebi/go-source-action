@@ -105,6 +105,24 @@ this feature is originally provided by [vscode-go](https://marketplace.visualstu
 This extension contributes the following settings:
 
 * `go.sourceAction.accessor.nilProtection`: enable/disable nil protection for getters and setters, see [Generate Getters and Setters](#generate-getters-and-setters) for more details.
+* `go.sourceAction.accessor.defaultValueForType`: user specified default value for types. When getters have nil receiver, this value is returned if the type of the field matches this config.
+
+For example, if you don't want to return `""` for string fields, you can set this config like below.
+```json
+    "go.sourceAction.accessor.defaultValueForType": {
+        "string": "consts.EmptyString",
+    }
+```
+
+then the generated code will look like this.
+```go
+func (f *Foo) GetBar() int {
+    if f != nil {
+        return f.bar
+    }
+    return consts.EmptyString
+}
+```
 
 ## Release Notes
 
