@@ -23,7 +23,13 @@ export const genConstructor = async () => {
     const insertPos = editor.document.lineAt(insertPosLine).range.end;
 
     window.showQuickPick(
-        structInfo.fieldsName,
+        structInfo.fieldsName.map((fieldName) => {
+            return {
+                label: fieldName,
+                description: structInfo.fields.get(fieldName),
+                picked: true
+            };
+        }),
         {
             placeHolder: 'Select fields to initialize.',
             canPickMany: true
@@ -39,12 +45,12 @@ export const genConstructor = async () => {
 
             let longestFieldLength = 0;
             for (let i = 0; i < selectedFields.length; i++) {
-                const field = selectedFields[i];
-                if (field.length > longestFieldLength) {
-                    longestFieldLength = field.length;
+                const fieldName = selectedFields[i].label;
+                if (fieldName.length > longestFieldLength) {
+                    longestFieldLength = fieldName.length;
                 }
-                sb.append(`${field} `);
-                sb.append(`${structInfo.fields.get(field)}`);
+                sb.append(`${fieldName} `);
+                sb.append(`${structInfo.fields.get(fieldName)}`);
                 if (i < selectedFields.length - 1) {
                     sb.append(', ');
                 }
@@ -54,9 +60,10 @@ export const genConstructor = async () => {
 
             sb.appendLine(`    return &${structInfo.structName}{`);
             for (const field of selectedFields) {
-                sb.append(`        ${field}: `);
-                sb.append(' '.repeat(longestFieldLength - field.length));
-                sb.appendLine(`${field},`);
+                const fieldName = field.label;
+                sb.append(`        ${fieldName}: `);
+                sb.append(' '.repeat(longestFieldLength - fieldName.length));
+                sb.appendLine(`${fieldName},`);
             }
             sb.appendLine('    }');
             sb.appendLine('}');

@@ -24,7 +24,13 @@ export const genGetterSetter = async () => {
     const insertPos = editor.document.lineAt(insertPosLine).range.end;
 
     window.showQuickPick(
-        structInfo.fieldsName,
+        structInfo.fieldsName.map((fieldName) => {
+            return {
+                label: fieldName,
+                description: structInfo.fields.get(fieldName),
+                picked: true
+            };
+        }),
         {
             placeHolder: 'Select fields to generate getter and setter.',
             canPickMany: true
@@ -38,12 +44,13 @@ export const genGetterSetter = async () => {
 
         const sb = new StringBuilder();
         for (const field of selectedFields) {
+            const fieldName = field.label;
             const structName = structInfo.structName;
             const receiver = structInfo.receiverName;
-            const fieldType = structInfo.fields.get(field) || '<unknown>';
+            const fieldType = structInfo.fields.get(fieldName) || '<unknown>';
 
-            appendGetter(sb, receiver, structName, field, fieldType, nilProtection);
-            appendSetter(sb, receiver, structName, field, fieldType, nilProtection);
+            appendGetter(sb, receiver, structName, fieldName, fieldType, nilProtection);
+            appendSetter(sb, receiver, structName, fieldName, fieldType, nilProtection);
         }
         editor.edit(editBuilder => {
             editBuilder.insert(insertPos, sb.toString());
