@@ -120,6 +120,12 @@ function getDefaultValue(type?: string): [string, boolean] {
     if (!type) {
         return ['nil', true];
     }
+
+    const cfgValue = getDefaultValueFromCfg(type);
+    if (cfgValue) {
+        return [cfgValue, true];
+    }
+
     if (numericTypes.has(type)) {
         return ['0', true];
     }
@@ -134,6 +140,11 @@ function getDefaultValue(type?: string): [string, boolean] {
     }
     return ['', false];
 }
+
+const getDefaultValueFromCfg = (type: string): string | undefined => {
+    const cfg = workspace.getConfiguration('go.sourceAction.accessor.defaultValueForType');
+    return cfg.get(type);
+};
 
 const numericTypes = new Set([
     'int', 'int8', 'int16', 'int32', 'int64',
