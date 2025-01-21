@@ -20,29 +20,47 @@
     "type": "git",
     "url": "https://github.com/xckomorebi/go-source-action.git"
   },
-  "activationEvents": [],
+  "activationEvents": [
+    "onLanguage:go"
+  ],
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
       {
         "command": "go.sourceAction.accessor",
-        "title": "Generate Getters and Setters",
-        "category": "Go",
+        "title": "Go: Generate Getters and Setters",
         "enablement": "editorLangId == 'go'"
       },
       {
         "command": "go.sourceAction.constructor",
-        "title": "Generate Constructor",
-        "category": "Go",
+        "title": "Go: Generate Constructor",
         "enablement": "editorLangId == 'go'"
       },
       {
         "command": "go.sourceAction.interfaceStub",
-        "title": "Generate Interface Stubs for Struct",
-        "category": "Go",
+        "title": "Go: Generate Interface Stubs for Struct",
         "enablement": "editorLangId == 'go'"
       }
     ],
+    "menus": {
+      "editor/context": [
+        {
+          "when": "editorLangId == 'go'",
+          "command": "go.sourceAction.accessor",
+          "group": "Go Source Action"
+        },
+        {
+          "when": "editorLangId == 'go'",
+          "command": "go.sourceAction.constructor",
+          "group": "Go Source Action"
+        },
+        {
+          "when": "editorLangId == 'go'",
+          "command": "go.sourceAction.interfaceStub",
+          "group": "Go Source Action"
+        }
+      ]
+    },
     "configuration": [
       {
         "title": "object",
