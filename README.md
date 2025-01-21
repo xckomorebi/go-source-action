@@ -124,10 +124,6 @@ func (f *Foo) GetBar() int {
 }
 ```
 
-## Release Notes
-
-has not been released yet.
-
 ## License
 
 This project is licensed under the GPLv3 license
