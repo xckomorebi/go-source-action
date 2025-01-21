@@ -5,7 +5,7 @@ This extension generates boilerplate code for Go structures.
 
 It mainly focuses on trivial code generation tasks like getters and setters, constructors, and interface stubs. More complicated tasks like nested struct are not meant to be supported.
 
-This extension inspired by [Language Support for Java(TM) by Red](https://marketplace.visualstudio.com/items?itemName=redhat.java).
+This extension is inspired by [Language Support for Java(TM) by Red](https://marketplace.visualstudio.com/items?itemName=redhat.java).
 
 
 ## QuickStart
@@ -14,7 +14,7 @@ There's not much preparation needed to start using this extension.
 
 Just open up a command palette and type a command (like `Go: Generate Getters and Setter`), then you are ready to go!
 
-![](resources/go-source-action-demo.gif)
+![](docs/demo/go-source-action-demo.gif)
 
 ## Requirements
 
