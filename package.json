@@ -45,6 +45,11 @@
         "enablement": "editorLangId == 'go'"
       },
       {
+        "command": "go.sourceAction.stringer",
+        "title": "Go: Generate String Method",
+        "enablement": "editorLangId == 'go'"
+      },
+      {
         "command": "go.sourceAction.interfaceStub",
         "title": "Go: Generate Interface Stubs for Struct",
         "enablement": "editorLangId == 'go'"
@@ -83,7 +88,41 @@
             "definitions": {
               "type": "string"
             },
+            "enumItemLabels": [
+              "string",
+              "int",
+              "float",
+              "bool",
+              "interface{}",
+              "time.Time",
+              "time.Duration",
+              "[]byte",
+              "map[string]interface{}",
+              "map[string]string",
+              "map[string]int",
+              "map[string]float64",
+              "map[string]bool",
+              "map[string]interface{}",
+              "map[string]time.Time",
+              "map[string]time.Duration",
+              "map[string][]byte",
+              "map[string]map[string]interface{}",
+              "map[string]map[string]string",
+              "map[string]map[string]int",
+              "map[string]map[string]float64",
+              "map[string]map[string]bool",
+              "map[string]map[string]interface{}",
+              "map[string]map[string]time.Time",
+              "map[string]map[string]time.Duration",
+              "map[string]map[string][]byte"
+            ],
             "description": "Default value for Getters to return when receiver is nil"
+          },
+          "go.sourceAction.accessor.stringerTemplate": {
+            "type": "array",
+            "definitions": {
+              "type": "string"
+            }
           }
         }
       }

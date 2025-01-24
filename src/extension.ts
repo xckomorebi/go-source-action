@@ -4,6 +4,7 @@ import { genConstructor } from './genConstructor';
 import { genInterfaceStub } from './genInterfaceStub';
 import { genGetterSetter } from './genGetterSetter';
 import { golangCodeActionProvider } from './codeActionProvider';
+import { genStringer } from './genStringer';
 
 export function activate(context: vscode.ExtensionContext) {
 	// code action provider
@@ -12,6 +13,7 @@ export function activate(context: vscode.ExtensionContext) {
 	// commands
 	context.subscriptions.push(vscode.commands.registerCommand('go.sourceAction.accessor', genGetterSetter));
 	context.subscriptions.push(vscode.commands.registerCommand('go.sourceAction.constructor', genConstructor));
+	context.subscriptions.push(vscode.commands.registerCommand('go.sourceAction.stringer', genStringer));
 	context.subscriptions.push(vscode.commands.registerCommand('go.sourceAction.interfaceStub', genInterfaceStub));
 }
 
