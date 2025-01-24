@@ -29,7 +29,6 @@ export const genInterfaceStub = async () => {
         prompt: 'Enter interface to implement.'
     }).then((value) => {
         if (!value) {
-            window.showErrorMessage('No interface found.');
             return;
         }
 

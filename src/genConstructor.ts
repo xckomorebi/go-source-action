@@ -36,7 +36,10 @@ export const genConstructor = async () => {
         }
     ).then((selectedFields) => {
         const sb = new StringBuilder();
-        if (!selectedFields || selectedFields.length === 0) {
+        if (!selectedFields) {
+            return;
+        }
+        if (selectedFields.length === 0) {
             sb.appendLine(`\nfunc New${structInfo.structName}() *${structInfo.structName} {`);
             sb.appendLine(`    return &${structInfo.structName}{}`);
             sb.appendLine('}');
@@ -68,7 +71,6 @@ export const genConstructor = async () => {
             sb.appendLine('    }');
             sb.appendLine('}');
         }
-
 
         editor.edit((editBuilder) => {
             editBuilder.insert(insertPos, sb.toString());
