@@ -1,31 +1,38 @@
 Go Source Action
 ===
 
-This extension generates boilerplate code for Go structures.
+[![Build Status](https://github.com/xckomorebi/go-source-action/actions/workflows/ci.yml/badge.svg)](https://github.com/xckomorebi/go-source-action/actions?query=workflow:Build)
 
-It mainly focuses on trivial code generation tasks like getters and setters, constructors, and interface stubs. More complicated tasks like nested struct are not meant to be supported.
+
+This Visual Studio Code extension streamlines the generation of boilerplate code for Go structures.
+
+It focuses on trivial code generation tasks like getters and setters, constructors, and interface stubs. More complicated tasks, such as handling nested struct, are out of scope for this extension.
 
 This extension is inspired by [Language Support for Java(TM) by Red](https://marketplace.visualstudio.com/items?itemName=redhat.java).
 
 
-## QuickStart
+QuickStart
+===
 
-There's not much preparation needed to start using this extension.
-
-Just open up a command palette and type a command (like `Go: Generate Getters and Setter`), then you are ready to go!
+There are multiple ways to trigger the code generation. For example, you can use `Source Actions` and select the desired action from the list:
 
 ![](docs/demo/go-source-action-demo.gif)
 
-## Requirements
+Alternatively, you can use the command palette (e.g., `Go: Generate Getters and Setter`), or by right-clicking on the editor.
+
+Requirements
+===
 
 [impl](https://github.com/josharian/impl) command has to be installed for "Gererate Interface Stub" feature.
 
 
-## Features
+Features
+===
 
-### Generate Getters and Setters
+Generate Getters and Setters
+---
 
-generates getters and setters for the fields of the structure with nil protection.
+Generates getters and setters for the fields of the structure with nil protection.
 
 ```go
 type Foo struct {
@@ -47,7 +54,7 @@ func (f *Foo) SetBar(bar int) {
 }
 ```
 
-if no nil protection is needed, you can disable it in vscode settings.
+If no nil protection is needed, you can disable it in vscode settings.
 
 ```json
     "go.sourceAction.accessor.nilProtection": false
@@ -66,9 +73,10 @@ func (f *Foo) SetBar(bar int) {
 ```
  
 
-### Generate Constructors
+Generate Constructors
+---
 
-generates constructors for the structure.
+Generates constructors for the structure.
 
 ```go
 type Foo struct {
@@ -83,9 +91,10 @@ func NewFoo(bar int) *Foo {
 }
 ```
 
-### Generate Interface Stub
+Generate Interface Stub
+---
 
-generates an interface stub for the structure.
+Generates an interface stub for the structure.
 
 ```go
 type Foo struct {
@@ -98,9 +107,10 @@ func (f *Foo) Close() error {
 }
 ```
 
-this feature is originally provided by [vscode-go](https://marketplace.visualstudio.com/items?itemName=golang.Go) extension, and I made a tiny modification to omit the need to explicitly specify the receiver and struct name.
+This feature is originally provided by [vscode-go](https://marketplace.visualstudio.com/items?itemName=golang.Go) extension, and I made a tiny modification to omit the need to explicitly specify the receiver and struct name.
 
-## Extension Settings
+Extension Settings
+===
 
 This extension contributes the following settings:
 
@@ -124,10 +134,10 @@ func (f *Foo) GetBar() int {
 }
 ```
 
-## License
+License
+===
 
 This project is licensed under the GPLv3 license
 
-see [LICENSE](LICENSE)
+see [GPLv3.0](LICENSE)
 
-**Enjoy!**

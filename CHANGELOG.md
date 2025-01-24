@@ -4,6 +4,13 @@ All notable changes to the "go-source-action" extension will be documented in th
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+v0.1.1
+---
+Date: 2024-01-25
+### Changes
+* When user cancels the selection, the command is no longer executed
+* Update README
+
 v0.1.0
 ---
 Date: 2024-01-21
