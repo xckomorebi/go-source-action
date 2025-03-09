@@ -4,7 +4,7 @@ import { QuickPickItem } from 'vscode';
 
 const structRegex = /^type\s+(\w+)\s+struct\s*{/;
 // fieldName fieldType `tag`
-const fieldRegex = /^\s*(?<fieldName>\w+)\s+(?<fieldType>((<-chan|chan<-|chan)\s+)?[\{\}\*\[\]\w+_]+)(\s+`[\w\s,_":]+`)?/;
+const fieldRegex = /^\s*(?<fieldName>\w+)\s+(?<fieldType>((<-chan|chan<-|chan)\s+)?[\{\}\*\[\]\w+_\.]+)(\s+`[\w\s,_":]+`)?/;
 
 export const getStructInfo = async (editor: TextEditor, noFields?: boolean): Promise<StructInfo | undefined> => {
     const structInfoArray: StructInfo[] = [];
