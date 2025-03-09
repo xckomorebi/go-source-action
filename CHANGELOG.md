@@ -4,6 +4,12 @@ All notable changes to the "go-source-action" extension will be documented in th
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+v0.1.2
+---
+Date: 2024-03-09
+### Changes
+* Minor bug fix
+
 v0.1.1
 ---
 Date: 2024-01-25
